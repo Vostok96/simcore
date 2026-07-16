@@ -1,0 +1,628 @@
+openapi: 3.0.3
+info:
+  title: MUFFIN API
+  version: 0.1.0
+  description: >-
+    Contrato inicial para Microbiologia: Unidad de Fuentes, Flujos e Informes
+    Nosocomiales. Reemplaza gradualmente los endpoints heredados de SIMCORE.
+servers:
+  - url: /api/v1
+tags:
+  - name: Authentication
+  - name: Administration
+  - name: Patients
+  - name: Orders
+  - name: Results
+  - name: Catalogs
+security:
+  - bearerAuth: []
+paths:
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Authenticate a user and return an access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authenticated session token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /auth/me:
+    get:
+      tags: [Authentication]
+      summary: Get the authenticated user
+      responses:
+        '200':
+          description: Authenticated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /admin/users:
+    get:
+      tags: [Administration]
+      summary: List users
+      responses:
+        '200':
+          description: Users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Administration]
+      summary: Create a user with roles and area permissions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /admin/areas:
+    post:
+      tags: [Administration]
+      summary: Create a laboratory area
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LaboratoryAreaInput'
+      responses:
+        '201':
+          description: Area created
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /admin/audit-events:
+    get:
+      tags: [Administration]
+      summary: List the latest audit events
+      responses:
+        '200':
+          description: Recent audit events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditEvent'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /patients:
+    get:
+      tags: [Patients]
+      summary: List or search patients
+      parameters:
+        - $ref: '#/components/parameters/Search'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Patient page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientPage'
+    post:
+      tags: [Patients]
+      summary: Create a patient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientInput'
+      responses:
+        '201':
+          description: Patient created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /patients/{patientId}:
+    parameters:
+      - $ref: '#/components/parameters/PatientId'
+    get:
+      tags: [Patients]
+      summary: Get a patient
+      responses:
+        '200':
+          description: Patient
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [Patients]
+      summary: Update patient demographics
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientInput'
+      responses:
+        '200':
+          description: Patient updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+  /orders:
+    get:
+      tags: [Orders]
+      summary: List orders
+      parameters:
+        - name: from
+          in: query
+          schema: { type: string, format: date }
+        - name: to
+          in: query
+          schema: { type: string, format: date }
+        - $ref: '#/components/parameters/Search'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Order page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderPage'
+    post:
+      tags: [Orders]
+      summary: Create an order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '201':
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /orders/{orderId}:
+    parameters:
+      - $ref: '#/components/parameters/OrderId'
+    get:
+      tags: [Orders]
+      summary: Get order and its items
+      responses:
+        '200':
+          description: Order detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /orders/{orderId}/items:
+    parameters:
+      - $ref: '#/components/parameters/OrderId'
+    post:
+      tags: [Orders]
+      summary: Add a requested exam and specimen to an order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItemInput'
+      responses:
+        '201':
+          description: Order item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+  /order-items/{orderItemId}/receive:
+    parameters:
+      - $ref: '#/components/parameters/OrderItemId'
+    post:
+      tags: [Orders]
+      summary: Record specimen reception
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [receivedAt]
+              properties:
+                receivedAt: { type: string, format: date-time }
+                destinationId: { type: string, format: uuid }
+                notes: { type: string, maxLength: 2000 }
+      responses:
+        '200':
+          description: Item received
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+        '409':
+          $ref: '#/components/responses/InvalidTransition'
+  /order-items/{orderItemId}/result:
+    parameters:
+      - $ref: '#/components/parameters/OrderItemId'
+    get:
+      tags: [Results]
+      summary: Get result form and current values
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+    put:
+      tags: [Results]
+      summary: Save a result in progress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResultInput'
+      responses:
+        '200':
+          description: Result saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /order-items/{orderItemId}/result/preliminary-validation:
+    parameters:
+      - $ref: '#/components/parameters/OrderItemId'
+    post:
+      tags: [Results]
+      summary: Validate a result preliminarily
+      responses:
+        '200':
+          description: Result preliminarily validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/InvalidTransition'
+  /order-items/{orderItemId}/result/final-validation:
+    parameters:
+      - $ref: '#/components/parameters/OrderItemId'
+    post:
+      tags: [Results]
+      summary: Validate a result finally
+      responses:
+        '200':
+          description: Result finally validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/InvalidTransition'
+  /catalogs/{catalogName}:
+    parameters:
+      - name: catalogName
+        in: path
+        required: true
+        schema:
+          type: string
+          enum: [origins, services, clinicians, areas, exams, specimen-types, organisms, antibiotics, ast-panels, comments, destinations]
+    get:
+      tags: [Catalogs]
+      summary: List active catalog entries
+      responses:
+        '200':
+          description: Catalog entries
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CatalogItem'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    PatientId:
+      name: patientId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    OrderItemId:
+      name: orderItemId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    Search:
+      name: search
+      in: query
+      schema: { type: string, maxLength: 100 }
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+    PageSize:
+      name: pageSize
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 25 }
+  responses:
+    NotFound:
+      description: Resource not found
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    Conflict:
+      description: Resource conflicts with an existing record
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    Forbidden:
+      description: Current user is not authorized
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    Unauthorized:
+      description: Authentication failed or access token is expired
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    ValidationError:
+      description: Request is invalid
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    InvalidTransition:
+      description: Workflow transition is not permitted
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+  schemas:
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username: { type: string }
+        password: { type: string, format: password }
+    TokenResponse:
+      type: object
+      required: [access_token, token_type, expires_in]
+      properties:
+        access_token: { type: string }
+        token_type: { type: string, example: bearer }
+        expires_in: { type: integer, example: 1800 }
+    User:
+      type: object
+      required: [id, username, given_name, family_name, is_active, roles]
+      properties:
+        id: { type: string, format: uuid }
+        username: { type: string }
+        given_name: { type: string }
+        family_name: { type: string }
+        is_active: { type: boolean }
+        roles:
+          type: array
+          items: { type: string }
+    UserInput:
+      type: object
+      required: [username, given_name, family_name, password, role_codes]
+      properties:
+        username: { type: string }
+        given_name: { type: string }
+        family_name: { type: string }
+        password: { type: string, format: password }
+        role_codes:
+          type: array
+          items: { type: string }
+        area_permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AreaPermission'
+    AreaPermission:
+      type: object
+      required: [laboratory_area_id]
+      properties:
+        laboratory_area_id: { type: string, format: uuid }
+        can_preliminary_validate: { type: boolean, default: false }
+        can_final_validate: { type: boolean, default: false }
+    LaboratoryAreaInput:
+      type: object
+      required: [code, name]
+      properties:
+        code: { type: string }
+        name: { type: string }
+        section: { type: string, default: MICROBIOLOGY }
+    AuditEvent:
+      type: object
+      required: [id, entity_type, action, occurred_at]
+      properties:
+        id: { type: string, format: uuid }
+        actor_user_id: { type: string, format: uuid, nullable: true }
+        entity_type: { type: string }
+        entity_id: { type: string, format: uuid, nullable: true }
+        action: { type: string }
+        occurred_at: { type: string, format: date-time }
+        reason: { type: string, nullable: true }
+    PatientInput:
+      type: object
+      required: [medicalRecordNumber, familyName, givenName, birthDate, sex]
+      properties:
+        medicalRecordNumber: { type: string, maxLength: 50 }
+        documentNumber: { type: string, maxLength: 30 }
+        familyName: { type: string, maxLength: 120 }
+        givenName: { type: string, maxLength: 120 }
+        birthDate: { type: string, format: date }
+        sex: { type: string, enum: [F, M, X] }
+    Patient:
+      allOf:
+        - $ref: '#/components/schemas/PatientInput'
+        - type: object
+          required: [id]
+          properties: { id: { type: string, format: uuid } }
+    PatientPage:
+      type: object
+      required: [data, page, pageSize, total]
+      properties:
+        data: { type: array, items: { $ref: '#/components/schemas/Patient' } }
+        page: { type: integer }
+        pageSize: { type: integer }
+        total: { type: integer }
+    OrderInput:
+      type: object
+      required: [patientId, orderedAt, originId, serviceId]
+      properties:
+        patientId: { type: string, format: uuid }
+        orderedAt: { type: string, format: date-time }
+        originId: { type: string, format: uuid }
+        serviceId: { type: string, format: uuid }
+        clinicianId: { type: string, format: uuid }
+        clinicalNotes: { type: string, maxLength: 4000 }
+    Order:
+      allOf:
+        - $ref: '#/components/schemas/OrderInput'
+        - type: object
+          required: [id, orderNumber, status, items]
+          properties:
+            id: { type: string, format: uuid }
+            orderNumber: { type: string }
+            status: { type: string, enum: [DRAFT, REGISTERED, CANCELLED, CLOSED] }
+            items: { type: array, items: { $ref: '#/components/schemas/OrderItem' } }
+    OrderPage:
+      type: object
+      required: [data, page, pageSize, total]
+      properties:
+        data: { type: array, items: { $ref: '#/components/schemas/Order' } }
+        page: { type: integer }
+        pageSize: { type: integer }
+        total: { type: integer }
+    OrderItemInput:
+      type: object
+      required: [examId, specimenTypeId, collectionAt]
+      properties:
+        examId: { type: string, format: uuid }
+        specimenTypeId: { type: string, format: uuid }
+        barcode: { type: string, maxLength: 100 }
+        collectionAt: { type: string, format: date-time }
+        specimenNotes: { type: string, maxLength: 2000 }
+        location: { type: string, maxLength: 250 }
+    OrderItem:
+      allOf:
+        - $ref: '#/components/schemas/OrderItemInput'
+        - type: object
+          required: [id, status]
+          properties:
+            id: { type: string, format: uuid }
+            receivedAt: { type: string, format: date-time, nullable: true }
+            status: { type: string, enum: [REGISTERED, RECEIVED, IN_PROCESS, RESULT_SAVED, PRELIMINARY_VALIDATED, FINAL_VALIDATED, CANCELLED] }
+    ResultInput:
+      type: object
+      required: [values]
+      properties:
+        values:
+          type: array
+          items:
+            type: object
+            required: [parameterId]
+            properties:
+              parameterId: { type: string, format: uuid }
+              valueText: { type: string }
+              valueCode: { type: string, nullable: true }
+        isolates:
+          type: array
+          items:
+            type: object
+            required: [organismId]
+            properties:
+              organismId: { type: string, format: uuid }
+              colonyCountOptionId: { type: string, format: uuid, nullable: true }
+              phenotype: { type: string, nullable: true }
+              comment: { type: string, nullable: true }
+              astPanelId: { type: string, format: uuid, nullable: true }
+              antimicrobialResults:
+                type: array
+                items:
+                  type: object
+                  required: [antibioticId, interpretation, method]
+                  properties:
+                    antibioticId: { type: string, format: uuid }
+                    micValue: { type: string, nullable: true }
+                    interpretation: { type: string, enum: [S, SDD, I, R, POSITIVE, NEGATIVE, NA] }
+                    method: { type: string, enum: [MIC, DISK, INSTRUMENT, OTHER] }
+                    isReportable: { type: boolean, default: true }
+    Result:
+      allOf:
+        - $ref: '#/components/schemas/ResultInput'
+        - type: object
+          required: [id, orderItemId, status]
+          properties:
+            id: { type: string, format: uuid }
+            orderItemId: { type: string, format: uuid }
+            status: { type: string, enum: [IN_PROCESS, RESULT_SAVED, PRELIMINARY_VALIDATED, FINAL_VALIDATED] }
+            savedAt: { type: string, format: date-time, nullable: true }
+            preliminaryAt: { type: string, format: date-time, nullable: true }
+            finalAt: { type: string, format: date-time, nullable: true }
+    CatalogItem:
+      type: object
+      required: [id, code, name]
+      properties:
+        id: { type: string, format: uuid }
+        code: { type: string }
+        name: { type: string }
+        isActive: { type: boolean }
+    Error:
+      type: object
+      required: [code, message, traceId]
+      properties:
+        code: { type: string }
+        message: { type: string }
+        traceId: { type: string }
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field: { type: string }
+              message: { type: string }

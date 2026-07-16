@@ -163,3 +163,11 @@ c73602f Capture real SIMCORE frontend without patient data
 - Priorizar `Mic_orden`, `Mic_orden_detalle/Resultado_microbiologia`, `Mic_parametro`, `Mic_examen`, `Mic_orga` y reportes de microbiologia.
 - No subir capturas nuevas sin escaneo de privacidad.
 - Si se agrega backend real local, documentar variables de entorno y nunca versionar `.env`.
+
+## Actualizacion MUFFIN
+
+El proyecto ahora incluye una base de backend local en `backend/` con FastAPI, PostgreSQL, Alembic, JWT, Argon2, roles, permisos por area y auditoria. No es codigo del backend original de SIMCORE.
+
+El avance y el orden de construccion vigente estan en `docs/AVANCE_MUFFIN.md`. La politica acordada es construir y probar en local antes de cualquier despliegue al NAS ARM64.
+
+La siguiente sesion se realizara en Linux para validar Docker Compose localmente. Seguir `docs/HANDOFF_LINUX.md` antes de avanzar a catalogos o tocar el NAS.
