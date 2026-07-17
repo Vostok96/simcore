@@ -164,25 +164,6 @@ c73602f Capture real SIMCORE frontend without patient data
 - No subir capturas nuevas sin escaneo de privacidad.
 - Si se agrega backend real local, documentar variables de entorno y nunca versionar `.env`.
 
-## Capturas por rol agregadas
-
-El 2026-07-16 se agregaron capturas separadas por rol:
-
-```text
-role_captures/admin/
-role_captures/standard_user/
-```
-
-Leer primero:
-
-```text
-docs/SIMCORE_ROLE_CAPTURE_SUMMARY.md
-role_captures/admin/docs/ARCHITECTURE.md
-role_captures/standard_user/docs/ARCHITECTURE.md
-```
-
-Estas carpetas documentan rutas, assets, formularios y endpoints detectados por perfil. No contienen cuerpos de endpoints de datos ni codigo fuente real del backend.
-
 ## Actualizacion MUFFIN
 
 El proyecto ahora incluye una base de backend local en `backend/` con FastAPI, PostgreSQL, Alembic, JWT, Argon2, roles, permisos por area y auditoria. No es codigo del backend original de SIMCORE.

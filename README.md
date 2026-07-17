@@ -54,25 +54,6 @@ El avance, la politica de desarrollo local antes del NAS y el orden de construcc
 
 La guia de continuacion para la proxima sesion Linux esta en `docs/HANDOFF_LINUX.md`.
 
-## Capturas por rol
-
-Tambien se agregaron capturas separadas por perfil para estudiar permisos, rutas, assets y endpoints visibles:
-
-```text
-role_captures/admin/
-role_captures/standard_user/
-```
-
-Leer primero:
-
-```text
-docs/SIMCORE_ROLE_CAPTURE_SUMMARY.md
-role_captures/admin/docs/ARCHITECTURE.md
-role_captures/standard_user/docs/ARCHITECTURE.md
-```
-
-Estas capturas no guardan respuestas de datos/listados ni codigo fuente real del backend; documentan la arquitectura observable desde HTTP.
-
 ## Recapturar desde SIMCORE
 
 Usar solo para estructura/frontend, no para datos:
