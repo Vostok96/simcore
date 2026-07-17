@@ -182,3 +182,11 @@ role_captures/standard_user/docs/ARCHITECTURE.md
 ```
 
 Estas carpetas documentan rutas, assets, formularios y endpoints detectados por perfil. No contienen cuerpos de endpoints de datos ni codigo fuente real del backend.
+
+## Actualizacion MUFFIN
+
+El proyecto ahora incluye una base de backend local en `backend/` con FastAPI, PostgreSQL, Alembic, JWT, Argon2, roles, permisos por area y auditoria. No es codigo del backend original de SIMCORE.
+
+El avance y el orden de construccion vigente estan en `docs/AVANCE_MUFFIN.md`. La politica acordada es construir y probar en local antes de cualquier despliegue al NAS ARM64.
+
+La siguiente sesion se realizara en Linux para validar Docker Compose localmente. Seguir `docs/HANDOFF_LINUX.md` antes de avanzar a catalogos o tocar el NAS.

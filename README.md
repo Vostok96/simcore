@@ -46,7 +46,13 @@ El frontend espera endpoints como:
 /SIMCORE_WEB/Mic_orden_detalle_res/Guardar
 ```
 
-El archivo `docs/endpoints.json` lista las rutas detectadas. El servidor incluido responde con stubs vacios para que la UI no se rompa, pero el trabajo real sera reemplazar esos stubs por el backend ficticio conectado al NAS.
+El archivo `docs/endpoints.json` lista las rutas detectadas. El servidor incluido responde con stubs vacios para que la UI no se rompa. El backend real de MUFFIN se esta construyendo localmente en `backend/` y sustituira esos stubs de forma gradual despues de sus pruebas locales.
+
+## Estado de MUFFIN
+
+El avance, la politica de desarrollo local antes del NAS y el orden de construccion estan documentados en `docs/AVANCE_MUFFIN.md`.
+
+La guia de continuacion para la proxima sesion Linux esta en `docs/HANDOFF_LINUX.md`.
 
 ## Capturas por rol
 

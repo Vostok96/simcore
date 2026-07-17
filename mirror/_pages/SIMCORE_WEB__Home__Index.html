@@ -12,8 +12,9 @@
 	<meta http-equiv="Pragma" content="no-cache">
 	<!--<META http-equiv=refresh content=30>-->
 
-	<title>Index - SIMCORE WEB - Sistema de Información de Microbiología - ASP.NET</title>
+	<title>MUFFIN | Microbiología Hospitalaria</title>
 	<link href="/SIMCORE_WEB/Content/css?v=ivzLv745bmnThkrYOWP2Oyh3EQaw__rxaWvN5bNa0zg1" rel="stylesheet"/>
+	<link href="/SIMCORE_WEB/Content/muffin.css" rel="stylesheet"/>
 
 	<script src="/SIMCORE_WEB/bundles/modernizr?v=inCVuEFe6J4Q07A0AcRsbJic_UE5MwpRMNGcOtk94TE1"></script>
 
@@ -23,9 +24,9 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-info" style="font-weight:bold">
+	<nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark muffin-nav">
 		<a class="navbar-brand" href="/SIMCORE_WEB/">
-			<img src="/SIMCORE_WEB/Imagenes/simcorelogo.png" width="100" height="48" alt="logo">
+			<img src="/MUFFIN_ICONO.jpg" alt="MUFFIN, cupcake microbiológico">
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -177,22 +178,73 @@
 
 
 
-	<div class="container-fluid mt-4">
-		
+	<main class="muffin-dashboard">
+		<section class="muffin-hero" aria-labelledby="muffin-title">
+			<div>
+				<p class="muffin-eyebrow">Microbiología hospitalaria</p>
+				<h1 id="muffin-title">Bienvenido a <span>MUFFIN</span></h1>
+				<p class="muffin-hero-copy">Microbiología: Unidad de Fuentes, Flujos e Informes Nosocomiales. Una estación de trabajo clara para cuidar cada muestra, resultado y decisión clínica.</p>
+				<div class="muffin-hero-actions">
+					<a class="muffin-button muffin-button-primary" href="/SIMCORE_WEB/Mic_orden/"><i class="fas fa-plus-circle"></i> Nueva orden</a>
+					<a class="muffin-button muffin-button-secondary" href="/SIMCORE_WEB/Mic_orden_detalle/Resultado_microbiologia"><i class="fas fa-flask"></i> Ir a resultados</a>
+				</div>
+			</div>
+			<div class="muffin-mascot-wrap">
+				<img class="muffin-mascot" src="/MUFFIN_ICONO.jpg" alt="Mascota MUFFIN con microorganismos">
+			</div>
+		</section>
 
+		<div class="muffin-section-heading">
+			<div>
+				<h2>Estaciones de trabajo</h2>
+				<p>El flujo clínico se organiza desde la muestra hasta el informe.</p>
+			</div>
+		</div>
 
+		<section class="muffin-module-grid" aria-label="Módulos principales">
+			<a class="muffin-module" href="/SIMCORE_WEB/Mic_orden/">
+				<span class="muffin-module-icon"><i class="fas fa-clipboard-list"></i></span>
+				<h3>Solicitudes y muestras</h3>
+				<p>Registrar pacientes, órdenes, exámenes, toma y recepción de muestras.</p>
+			</a>
+			<a class="muffin-module" href="/SIMCORE_WEB/Mic_destinos_orden_detalle/">
+				<span class="muffin-module-icon"><i class="fas fa-barcode"></i></span>
+				<h3>Recepción y trazabilidad</h3>
+				<p>Verificar destinos, códigos de barras y el tránsito de cada muestra.</p>
+			</a>
+			<a class="muffin-module" href="/SIMCORE_WEB/Mic_orden_detalle/Resultado_microbiologia">
+				<span class="muffin-module-icon"><i class="fas fa-microscope"></i></span>
+				<h3>Resultados y AST</h3>
+				<p>Procesar parámetros, microorganismos, recuentos y antibiogramas.</p>
+			</a>
+			<a class="muffin-module" href="/SIMCORE_WEB/Trans_reportes/Microbiologia_rep_produccion">
+				<span class="muffin-module-icon"><i class="fas fa-chart-pie"></i></span>
+				<h3>Informes y vigilancia</h3>
+				<p>Consultar producción, emitir hojas de trabajo y apoyar la vigilancia nosocomial.</p>
+			</a>
+		</section>
 
-<div class="jumbotron">
-	<h1>Bienvenido</h1>
-	<p class="lead">Administrador, IT</p>
-</div>
+		<div class="muffin-section-heading">
+			<div>
+				<h2>Panel de turno</h2>
+				<p>La información operativa aparecerá aquí al conectar el backend de MUFFIN.</p>
+			</div>
+		</div>
 
+		<section class="muffin-workbench" aria-label="Resumen operativo">
+			<div>
+				<h3>Actividad pendiente</h3>
+				<div class="muffin-empty-state"><i class="fas fa-seedling"></i><span>Sin datos de demostración. La portada está lista para mostrar órdenes pendientes, muestras por verificar y validaciones por realizar.</span></div>
+			</div>
+			<div class="muffin-status">
+				<p class="muffin-status-label">Estado del entorno</p>
+				<strong>Modo de diseño local</strong>
+				<span>Interfaz funcional de referencia sin datos clínicos reales.</span>
+			</div>
+		</section>
 
-		<hr />
-		<footer>
-			<p>Copyright &copy; SIMCORE V3.1.15<br />2015 - 2026, Todos los derechos reservados</p>
-		</footer>
-	</div>
+		<footer class="muffin-footer">MUFFIN | Microbiología: Unidad de Fuentes, Flujos e Informes Nosocomiales</footer>
+	</main>
 
 	<script src="/SIMCORE_WEB/bundles/jquery?v=8Oos0avDZyPg-cbyVzvkIfERIE1DGSe3sRQdCSYrgEQ1"></script>
 

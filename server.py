@@ -12,6 +12,7 @@ from urllib.parse import unquote, urlparse
 ROOT = Path(__file__).resolve().parent
 MIRROR = ROOT / "mirror"
 MANIFEST = ROOT / "docs" / "capture_manifest.json"
+BRAND_ICON = ROOT / "MUFFIN_ICONO.jpg"
 HOST = os.environ.get("SIMCORE_CLONE_HOST", "127.0.0.1")
 PORT = int(os.environ.get("SIMCORE_CLONE_PORT", "8877"))
 
@@ -87,6 +88,10 @@ class Handler(BaseHTTPRequestHandler):
 
         if request_path.startswith("/SIMCORE_WEB/~/"):
             request_path = request_path.replace("/SIMCORE_WEB/~/", "/SIMCORE_WEB/", 1)
+
+        if request_path == "/MUFFIN_ICONO.jpg":
+            self.serve_file(BRAND_ICON, request_path)
+            return
 
         if request_path in self.manifest.get("pages", {}):
             self.serve_page(request_path)
