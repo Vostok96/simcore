@@ -163,3 +163,22 @@ c73602f Capture real SIMCORE frontend without patient data
 - Priorizar `Mic_orden`, `Mic_orden_detalle/Resultado_microbiologia`, `Mic_parametro`, `Mic_examen`, `Mic_orga` y reportes de microbiologia.
 - No subir capturas nuevas sin escaneo de privacidad.
 - Si se agrega backend real local, documentar variables de entorno y nunca versionar `.env`.
+
+## Capturas por rol agregadas
+
+El 2026-07-16 se agregaron capturas separadas por rol:
+
+```text
+role_captures/admin/
+role_captures/standard_user/
+```
+
+Leer primero:
+
+```text
+docs/SIMCORE_ROLE_CAPTURE_SUMMARY.md
+role_captures/admin/docs/ARCHITECTURE.md
+role_captures/standard_user/docs/ARCHITECTURE.md
+```
+
+Estas carpetas documentan rutas, assets, formularios y endpoints detectados por perfil. No contienen cuerpos de endpoints de datos ni codigo fuente real del backend.

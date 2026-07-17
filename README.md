@@ -48,6 +48,25 @@ El frontend espera endpoints como:
 
 El archivo `docs/endpoints.json` lista las rutas detectadas. El servidor incluido responde con stubs vacios para que la UI no se rompa, pero el trabajo real sera reemplazar esos stubs por el backend ficticio conectado al NAS.
 
+## Capturas por rol
+
+Tambien se agregaron capturas separadas por perfil para estudiar permisos, rutas, assets y endpoints visibles:
+
+```text
+role_captures/admin/
+role_captures/standard_user/
+```
+
+Leer primero:
+
+```text
+docs/SIMCORE_ROLE_CAPTURE_SUMMARY.md
+role_captures/admin/docs/ARCHITECTURE.md
+role_captures/standard_user/docs/ARCHITECTURE.md
+```
+
+Estas capturas no guardan respuestas de datos/listados ni codigo fuente real del backend; documentan la arquitectura observable desde HTTP.
+
 ## Recapturar desde SIMCORE
 
 Usar solo para estructura/frontend, no para datos:
